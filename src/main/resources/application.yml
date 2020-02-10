@@ -1,0 +1,21 @@
+server:
+  port: 80
+spring:
+  application:
+    name: xladmin
+  datasource:
+    url: jdbc:mysql://140.143.218.245:10081/solar_blog?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&&useSSL=false
+    username: root
+    password: ENC(NZ5Addhy8YtJLH2ZybBNmUWh2SSLAn0v)
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+jasypt:
+  encryptor:
+    password: FPRTT+siYcCsGTfCwLi7zQ==
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mappers/*.xml

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxlsky.mapper.BCommentMapper">
+
+    <resultMap id="BaseRMP" type="com.cxlsky.pojo.entity.BComment">
+        <id property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="level" column="level"/>
+        <result property="replyNickname" column="reply_nickname"/>
+        <result property="replyEmail" column="reply_email"/>
+        <result property="replyUrl" column="reply_url"/>
+        <result property="status" column="status"/>
+        <result property="content" column="content"/>
+        <result property="articleId" column="article_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap id="CommentVoRMP" type="com.cxlsky.pojo.vo.CommentVo" extends="BaseRMP">
+        <collection  property="children" ofType="com.cxlsky.pojo.entity.BComment" select="com.cxlsky.mapper.BCommentMapper.getByPid" column="id">
+        </collection>
+    </resultMap>
+
+    <sql id="BaseCol">
+       id,pid,level,reply_nickname,reply_email,reply_url,`status`,content,article_id,create_time,modify_time
+    </sql>
+
+    <select id="getByArticle" resultMap="CommentVoRMP">
+        SELECT <include refid="BaseCol"/> FROM b_comment
+        WHERE level = 1 AND article_id = #{articleId}
+    </select>
+
+    <select id="getByPid" resultMap="BaseRMP">
+        select <include refid="BaseCol"/> FROM b_comment
+        WHERE level = 2 AND pid = #{pid}
+
+        UNION
+
+        SELECT <include refid="BaseCol"/> FROM b_comment
+        WHERE level = 2 AND pid IN (
+            SELECT id FROM b_comment WHERE level = 2 AND pid = #{pid}
+        )
+    </select>
+</mapper>

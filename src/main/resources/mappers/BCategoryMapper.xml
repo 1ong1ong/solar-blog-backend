@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxlsky.mapper.BCategoryMapper">
+
+    <resultMap id="CategoryDtoRmp" type="com.cxlsky.pojo.dto.CategoryDto">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="article_id" property="articleId"/>
+    </resultMap>
+
+    <select id="selectArticleCategory" resultType="com.cxlsky.pojo.dto.CategoryDto">
+        select bc.*, ba.id as article_id from b_category bc
+            left join b_article ba on bc.id = ba.category_id
+        where ba.id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </select>
+</mapper>
