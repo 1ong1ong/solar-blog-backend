@@ -119,7 +119,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.cxlsky.xladmin.MainApplication</mainClass>
+                    <mainClass>com.cxlsky.Main</mainClass>
                     <layout>ZIP</layout>
                     <executable>true</executable>
                     <outputDirectory>./docker</outputDirectory>
