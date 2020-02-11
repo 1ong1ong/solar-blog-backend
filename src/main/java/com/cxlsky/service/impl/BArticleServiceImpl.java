@@ -105,7 +105,7 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
     public List<TimeLineVo> getArticleTimeLine() {
         String dateFormat = "MM/yyyy";
 
-        List<BArticle> bArticles = bArticleMapper.selectList(new QueryWrapper<BArticle>().lambda().orderByDesc(BArticle::getCreateTime));
+        List<BArticle> bArticles = bArticleMapper.selectList(new QueryWrapper<BArticle>().lambda().eq(BArticle::getStatus, 1).orderByDesc(BArticle::getCreateTime));
         Map<String, List<BArticle>> monthDateMap = bArticles.stream().collect(Collectors.groupingBy(article -> DateTimeFormatter.ofPattern(dateFormat).format(article.getCreateTime())));
 
         List<TimeLineVo> timeLineVos = new ArrayList<>();
@@ -158,7 +158,7 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
             }
             queryWrapper.lambda().in(BArticle::getId, bArticleTags.stream().map(BArticleTag::getArticleId).distinct().collect(Collectors.toList()));
         }
-        queryWrapper.lambda().orderByDesc(BArticle::getCreateTime);
+        queryWrapper.lambda().eq(BArticle::getStatus, 1).orderByDesc(BArticle::getCreateTime);
         return queryWrapper;
     }
 }

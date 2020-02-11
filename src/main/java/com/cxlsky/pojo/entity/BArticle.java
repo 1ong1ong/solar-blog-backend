@@ -60,6 +60,11 @@ private static final long serialVersionUID=1L;
     private Integer wordCount;
 
     /**
+     * 文章状态， 1：发布  0：未发布
+     */
+    private Integer status;
+
+    /**
      * 添加时间
      */
     private LocalDateTime createTime;
