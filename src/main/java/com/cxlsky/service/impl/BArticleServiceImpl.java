@@ -52,7 +52,7 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
     private BCategoryMapper bCategoryMapper;
 
     @Override
-    @Cacheable(key = "'getArticlePage:'+#articleQuery.categoryId+#articleQuery.tagId+#articleQuery.pageNum+articleQuery.pageSize")
+    @Cacheable(key = "'getArticlePage:'+#articleQuery.categoryId+#articleQuery.tagId+#articleQuery.pageNum+#articleQuery.pageSize")
     public IPage<ArticleVo> getArticlePage(ArticleQuery articleQuery) {
         IPage<BArticle> articleIPage = new Page<>(articleQuery.getPageNum(), articleQuery.getPageSize());
         IPage<ArticleVo> articleVoIPage = new Page<>(articleQuery.getPageNum(), articleQuery.getPageSize());
