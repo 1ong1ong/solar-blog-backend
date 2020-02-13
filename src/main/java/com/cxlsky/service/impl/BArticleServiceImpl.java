@@ -3,28 +3,28 @@ package com.cxlsky.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cxlsky.mapper.BArticleMapper;
 import com.cxlsky.mapper.BArticleTagMapper;
 import com.cxlsky.mapper.BCategoryMapper;
 import com.cxlsky.mapper.BTagMapper;
 import com.cxlsky.pojo.dto.CategoryDto;
 import com.cxlsky.pojo.dto.TagDto;
 import com.cxlsky.pojo.entity.BArticle;
-import com.cxlsky.mapper.BArticleMapper;
 import com.cxlsky.pojo.entity.BArticleTag;
-import com.cxlsky.pojo.entity.BCategory;
 import com.cxlsky.pojo.query.ArticleQuery;
 import com.cxlsky.pojo.vo.ArticleVo;
 import com.cxlsky.pojo.vo.TimeLineVo;
 import com.cxlsky.service.IBArticleService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cxlsky.utils.DateUtil;
 import com.cxlsky.utils.WordUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
  * @since 2020-02-07
  */
 @Service
+@CacheConfig(cacheNames = "cache1Hour")
 public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> implements IBArticleService {
 
     @Autowired
@@ -50,6 +51,7 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
     private BCategoryMapper bCategoryMapper;
 
     @Override
+    @Cacheable(key = "'getArticlePage:'+#articleQuery.categoryId+#articleQuery.tagId+#articleQuery.pageNum+articleQuery.pageSize")
     public IPage<ArticleVo> getArticlePage(ArticleQuery articleQuery) {
         IPage<BArticle> articleIPage = new Page<>(articleQuery.getPageNum(), articleQuery.getPageSize());
         IPage<ArticleVo> articleVoIPage = new Page<>(articleQuery.getPageNum(), articleQuery.getPageSize());
@@ -85,6 +87,7 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
     }
 
     @Override
+    @Cacheable(key = "'getArticleLatest:'")
     public List<ArticleVo> getArticleLatest() {
         ArticleQuery articleQuery = new ArticleQuery();
         IPage<ArticleVo> articlePage = getArticlePage(articleQuery);
@@ -102,6 +105,7 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
     }
 
     @Override
+    @Cacheable(key = "'getArticleTimeLine:'")
     public List<TimeLineVo> getArticleTimeLine() {
         String dateFormat = "MM/yyyy";
 
@@ -124,6 +128,7 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
     }
 
     @Override
+    @Cacheable(key = "'getArticleDetail:'+#id")
     public ArticleVo getArticleDetail(Long id) {
         BArticle bArticle = bArticleMapper.selectById(id);
 

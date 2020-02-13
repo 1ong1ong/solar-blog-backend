@@ -26,7 +26,6 @@ public class BLinkServiceImpl extends ServiceImpl<BLinkMapper, BLink> implements
 
     @Override
     public List<BLink> getByType(Integer type) {
-        List<BLink> bLinks = bLinkMapper.selectList(new QueryWrapper<BLink>().lambda().eq(BLink::getType, type));
-        return bLinks;
+        return bLinkMapper.selectList(new QueryWrapper<BLink>().lambda().eq(BLink::getType, type));
     }
 }

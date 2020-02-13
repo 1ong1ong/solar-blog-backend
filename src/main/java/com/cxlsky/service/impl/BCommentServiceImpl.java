@@ -46,7 +46,6 @@ public class BCommentServiceImpl extends ServiceImpl<BCommentMapper, BComment> i
 
     @Override
     public List<CommentVo> getByArticle(Long articleId) {
-        List<CommentVo> commentVos = bCommentMapper.getByArticle(articleId);
-        return commentVos;
+        return bCommentMapper.getByArticle(articleId);
     }
 }
