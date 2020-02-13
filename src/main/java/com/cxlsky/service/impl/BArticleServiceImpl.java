@@ -21,6 +21,7 @@ import com.cxlsky.utils.WordUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -148,6 +149,11 @@ public class BArticleServiceImpl extends ServiceImpl<BArticleMapper, BArticle> i
         }
 
         return null;
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public void articleCacheEvict() {
     }
 
     private QueryWrapper<BArticle> articleQueryWrapper(ArticleQuery articleQuery) {

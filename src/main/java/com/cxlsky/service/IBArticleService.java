@@ -48,4 +48,9 @@ public interface IBArticleService extends IService<BArticle> {
      * @return
      */
     List<TimeLineVo> getArticleTimeLine();
+
+    /**
+     * 删除缓存
+     */
+    void articleCacheEvict();
 }
