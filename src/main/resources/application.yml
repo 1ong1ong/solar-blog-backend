@@ -23,3 +23,8 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mappers/*.xml
+
+oss:
+  host: http://118.24.22.55:9000/
+  access-key: minioadmin
+  secret-key: minioadmin

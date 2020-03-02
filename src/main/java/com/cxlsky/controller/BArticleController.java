@@ -2,6 +2,7 @@ package com.cxlsky.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cxlsky.pojo.bean.OssClient;
 import com.cxlsky.pojo.entity.BArticle;
 import com.cxlsky.pojo.query.ArticleQuery;
 import com.cxlsky.pojo.vo.ArticleVo;
@@ -11,13 +12,16 @@ import com.cxlsky.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author cxl
@@ -58,6 +62,17 @@ public class BArticleController {
     public ResponseEntity<Boolean> articleCacheEvict() {
         ibArticleService.articleCacheEvict();
         return ResultUtil.ok(Boolean.TRUE);
+    }
+
+    @Autowired
+    private OssClient ossClient;
+
+    @PostMapping("/upload")
+    public String upload(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String datePrefix = "/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "/";
+        String fileName = datePrefix + originalFilename;
+        return ossClient.upload(file, "imgs", fileName);
     }
 }
 
